@@ -1,0 +1,2 @@
+C:\Users\Joe\source\repos\OOSD\OOSD\x64\Debug\OOSD.vcxproj.AssemblyReference.cache
+C:\Users\Joe\source\repos\OOSD\OOSD\x64\Debug\OOSD.vcxproj.SuggestedBindingRedirects.cache
