@@ -3,6 +3,9 @@
 #include <QApplication>
 #include <QLocale>
 #include <QTranslator>
+#include <QTextStream>
+#include <QtSql>
+#include <QSqlDatabase>
 
 int main(int argc, char *argv[])
 {
@@ -17,6 +20,23 @@ int main(int argc, char *argv[])
             break;
         }
     }
+
+    // Connecting to db
+
+    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
+    db.setHostName("127.0.0.1");
+    db.setUserName("root");
+    db.setPassword("");
+    db.setDatabaseName("oosdproject");
+
+    if (db.open()) {
+        QTextStream(stdout) << "\nDatabase is connected succesfully";
+    } else {
+        QSqlError error = db.lastError();
+        QTextStream(stdout) << "\nDatabase is not connected";
+    }
+
+    // Loading login window
 
     LoginWindow lw;
     lw.show();

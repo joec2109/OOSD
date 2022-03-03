@@ -362,7 +362,7 @@
      <bool>false</bool>
     </property>
     <property name="currentText">
-     <string/>
+     <string>What is your mother's maiden name?</string>
     </property>
     <property name="sizeAdjustPolicy">
      <enum>QComboBox::AdjustToContents</enum>

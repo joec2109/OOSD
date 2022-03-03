@@ -78,7 +78,7 @@
      <number>0</number>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLineEdit" name="usernameBox">
     <property name="geometry">
      <rect>
       <x>120</x>
@@ -88,23 +88,23 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="usernameLabel">
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>50</x>
       <y>140</y>
-      <width>31</width>
+      <width>71</width>
       <height>21</height>
      </rect>
     </property>
     <property name="text">
-     <string>ID</string>
+     <string>Username</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
+   <widget class="QLabel" name="passwordLabel">
     <property name="geometry">
      <rect>
       <x>50</x>
@@ -120,7 +120,7 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_2">
+   <widget class="QLineEdit" name="passwordBox">
     <property name="geometry">
      <rect>
       <x>120</x>
@@ -128,6 +128,9 @@
       <width>131</width>
       <height>22</height>
      </rect>
+    </property>
+    <property name="echoMode">
+     <enum>QLineEdit::Password</enum>
     </property>
    </widget>
    <widget class="QPushButton" name="LoginButton">
