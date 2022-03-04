@@ -1,12 +1,13 @@
 #include "loginwindow.h"
 #include "ui_loginwindow.h"
 #include "signupwindow.h"
-#include "mainwindow.h"
+#include "MainWindow.h"
+#include "globals.h"
+#include "enterbankpin.h"
 #include <QTextStream>
 #include <QtSql>
 #include <QSqlDatabase>
 #include <QMessageBox>
-
 
 LoginWindow::LoginWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -39,18 +40,20 @@ void LoginWindow::on_LoginButton_clicked()
 
     if (query.exec()) {
         if (query.size() > 0) {
-            QString name = query.value(1).toString();
-            QTextStream(stdout) << name << "is logged in";
+
+            globalUsername = username;
+
+            QTextStream(stdout) << "\n" << username << " is logged in";
             QMessageBox::StandardButton alert;
             alert = QMessageBox::information(this, "Log In", "Logged in successfully",
                                         QMessageBox::Ok);
             if (alert == QMessageBox::Ok) {
-                qDebug() << "Ok was clicked";
+                qDebug() << "\nOk was clicked";
                 this->hide();
-                MainWindow *mw= new MainWindow();
-                mw->show();
+                EnterBankPin *ebp= new EnterBankPin();
+                ebp->show();
             } else {
-                qDebug() << "Ok was *not* clicked";
+                qDebug() << "\nOk was *not* clicked";
             }
         } else {
             QTextStream(stdout) << "Username or password is incorrect";
@@ -58,11 +61,10 @@ void LoginWindow::on_LoginButton_clicked()
             alert = QMessageBox::warning(this, "Log In", "Username or password is incorrect",
                                         QMessageBox::Ok);
             if (alert == QMessageBox::Ok) {
-                qDebug() << "Ok was clicked";
+                qDebug() << "\nOk was clicked";
             } else {
-                qDebug() << "Ok was *not* clicked";
+                qDebug() << "\nOk was *not* clicked";
             }
         }
     }
 }
-

@@ -165,23 +165,14 @@
       <x>120</x>
       <y>260</y>
       <width>131</width>
-      <height>24</height>
+      <height>41</height>
      </rect>
     </property>
     <property name="text">
-     <string>Forgot Password?</string>
+     <string>Forgot Password
+Or Username?</string>
     </property>
    </widget>
-  </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>362</width>
-     <height>22</height>
-    </rect>
-   </property>
   </widget>
  </widget>
  <resources/>

@@ -15,6 +15,13 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void on_homeButton_clicked();
+
+    void on_depositButton_clicked();
+
+    void on_depositButton_2_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

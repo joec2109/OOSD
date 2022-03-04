@@ -1,6 +1,7 @@
 #include "signupwindow.h"
 #include "ui_signupwindow.h"
-#include "mainwindow.h"
+#include "MainWindow.h"
+#include "loginwindow.h"
 #include <QTextStream>
 #include <QtSql>
 #include <QSqlDatabase>
@@ -195,10 +196,13 @@ void SignUpWindow::on_SignUpButton_clicked()
         QString str = ui->BankPINBox->text();
         int bankpin =  str.toInt();
 
-        QSqlQuery qry;
-        qry.prepare("INSERT INTO users (forename, surname, password, securityQuestion, securityAnswer, pin)"
-                    "VALUES (:forename, :surname, :password, :securityQuestion, :securityAnswer, :bankpin)");
+        QString username = forename[0] + surname;
 
+        QSqlQuery qry;
+        qry.prepare("INSERT INTO users (username, forename, surname, password, securityQuestion, securityAnswer, pin, userType)"
+                    "VALUES (:username, :forename, :surname, :password, :securityQuestion, :securityAnswer, :bankpin, 'Customer')");
+
+        qry.bindValue(":username", username);
         qry.bindValue(":forename", forename);
         qry.bindValue(":surname", surname);
         qry.bindValue(":password", password);
@@ -210,15 +214,15 @@ void SignUpWindow::on_SignUpButton_clicked()
             QTextStream(stdout) << "\nUser inserted into DB";
 
             QMessageBox::StandardButton alert;
-            alert = QMessageBox::information(this, "Sign Up", "Signed up successfully",
+            alert = QMessageBox::information(this, "Sign Up", "Signed up successfully\nYour username is : " + username,
                                         QMessageBox::Ok);
             if (alert == QMessageBox::Ok) {
-                qDebug() << "Ok was clicked";
+                qDebug() << "\nOk was clicked";
                 this->hide();
-                MainWindow *mw= new MainWindow();
-                mw->show();
+                LoginWindow *lw= new LoginWindow();
+                lw->show();
             } else {
-                qDebug() << "Ok was *not* clicked";
+                qDebug() << "\nOk was *not* clicked";
             }
 
         } else {

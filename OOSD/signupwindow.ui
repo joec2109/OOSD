@@ -362,7 +362,7 @@
      <bool>false</bool>
     </property>
     <property name="currentText">
-     <string>What is your mother's maiden name?</string>
+     <string/>
     </property>
     <property name="sizeAdjustPolicy">
      <enum>QComboBox::AdjustToContents</enum>
@@ -411,16 +411,6 @@
      </property>
     </item>
    </widget>
-  </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>452</width>
-     <height>22</height>
-    </rect>
-   </property>
   </widget>
  </widget>
  <resources/>
