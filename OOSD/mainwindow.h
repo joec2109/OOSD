@@ -22,6 +22,14 @@ private slots:
 
     void on_depositButton_2_clicked();
 
+    void on_withdrawButton_clicked();
+
+    void on_withdrawButton2_clicked();
+
+    void on_transferButton_clicked();
+
+    void on_transferButton2_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

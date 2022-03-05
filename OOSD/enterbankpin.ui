@@ -23,7 +23,11 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Enter Bank PIN</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../../Desktop/logo.ico</normaloff>../../Desktop/logo.ico</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="Title">
