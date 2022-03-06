@@ -30,6 +30,10 @@ private slots:
 
     void on_transferButton2_clicked();
 
+    void on_transactionsButton_clicked();
+
+    void on_accountButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

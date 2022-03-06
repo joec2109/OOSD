@@ -7,11 +7,20 @@
 extern QString globalUsername;
 extern QString globalBankPin;
 extern QString globalForename;
+extern QString globalSurname;
 extern QString globalBalance;
+extern QString globalPassword;
+extern QString globalUserType;
+extern QString globalSecurityQ;
+extern QString globalSecurityA;
 
 // For transfers
 
 extern QStringList globalTargetForenames;
 extern QStringList globalTargetSurnames;
+
+extern QStringList globalTransactionAmounts;
+extern QStringList globalTransactionActions;
+extern QStringList globalTransactionBalance;
 
 #endif // GLOBALS_H

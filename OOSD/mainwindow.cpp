@@ -7,6 +7,9 @@
 #include <QSqlQuery>
 #include <QMessageBox>
 #include <QSqlRecord>
+#include <QTableWidget>
+#include <QTableWidgetItem>
+#include <Qt>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -32,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     QSqlQuery query2;
 
-    query2.prepare("SELECT forename, surname FROM users WHERE forename != :globalForename AND username != :globalUsername");
+    query2.prepare("SELECT forename, surname FROM users WHERE forename != :globalForename AND username != :globalUsername AND userType = 'Customer'");
     query2.bindValue(":globalForename", globalForename);
     query2.bindValue(":globalUsername", globalUsername);
     query2.exec();
@@ -45,6 +48,33 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     ui->stackedWidget->setCurrentIndex(0);
+
+    // Collecting account info of logged in user
+
+    QSqlQuery query3;
+
+    query3.prepare("SELECT username, surname, password, securityQuestion, securityAnswer, userType FROM users WHERE forename = :globalForename AND pin = :globalBankPin");
+    query3.bindValue(":globalForename", globalForename);
+    query3.bindValue(":globalBankPin", globalBankPin);
+    query3.exec();
+
+    while (query3.next()) {
+        int usernameID = query3.record().indexOf("username");
+        int surnameID = query3.record().indexOf("surname");
+        int passwordID = query3.record().indexOf("password");
+        int securityQuestionID = query3.record().indexOf("securityQuestion");
+        int securityAnswerID = query3.record().indexOf("securityAnswer");
+        int userTypeID = query3.record().indexOf("userType");
+
+        globalUsername = query3.value(usernameID).toString();
+        globalSurname = query3.value(surnameID).toString();
+        globalPassword = query3.value(passwordID).toString();
+        globalSecurityQ = query3.value(securityQuestionID).toString();
+        globalSecurityA = query3.value(securityAnswerID).toString();
+        globalUserType = query3.value(userTypeID).toString();
+    }
+
+
 }
 
 MainWindow::~MainWindow()
@@ -110,6 +140,13 @@ void MainWindow::on_depositButton_2_clicked()
             query.bindValue(":amountToDeposit", amountToDeposit);
             query.bindValue(":globalUsername", globalUsername);
             query.bindValue(":globalBankPin", globalBankPin);
+
+            globalTransactionAmounts.append(depositAmountInput);
+            globalTransactionActions.append("Deposit");
+            globalTransactionBalance.append(QString::number(globalBalance.toDouble() + amountToDeposit));
+
+            globalBalance = QString::number(globalBalance.toDouble() + amountToDeposit);
+
             if (query.exec()) {
                 QTextStream(stdout) << "\nDeposit succesful";
                 QMessageBox::StandardButton alert;
@@ -191,6 +228,13 @@ void MainWindow::on_withdrawButton2_clicked()
             query.bindValue(":amountToWithdraw", amountToWithdraw);
             query.bindValue(":globalUsername", globalUsername);
             query.bindValue(":globalBankPin", globalBankPin);
+
+            globalTransactionAmounts.append(withdrawAmountInput);
+            globalTransactionActions.append("Withdraw");
+            globalTransactionBalance.append(QString::number(globalBalance.toDouble() - amountToWithdraw));
+
+            globalBalance = QString::number(globalBalance.toDouble() - amountToWithdraw);
+
             if (query.exec()) {
                 QTextStream(stdout) << "\nWithdraw succesful";
                 QMessageBox::StandardButton alert;
@@ -275,6 +319,12 @@ void MainWindow::on_transferButton2_clicked()
             query2.bindValue(":targetForename", targetForename);
             query2.bindValue(":targetSurname", targetSurname);
 
+            globalTransactionAmounts.append(transferAmountInput);
+            globalTransactionActions.append("Transfer");
+            globalTransactionBalance.append(QString::number(globalBalance.toDouble() - amountToTransfer));
+
+            globalBalance = QString::number(globalBalance.toDouble() - amountToTransfer);
+
             if (query.exec() && query2.exec()) {
                 QTextStream(stdout) << "\nTransfer successful";
                 QMessageBox::StandardButton alert;
@@ -320,5 +370,45 @@ void MainWindow::on_transferButton2_clicked()
             qDebug() << "\nOk was *not* clicked";
         }
     }
+}
+
+
+void MainWindow::on_transactionsButton_clicked()
+{
+    ui->transactionsTable->setRowCount(globalTransactionActions.length());
+    ui->transactionsTable->setColumnCount(3);
+
+    for (int i = 0; i < ui->transactionsTable->rowCount(); i++) {
+        QTableWidgetItem *item1 = new QTableWidgetItem();
+        item1->setText("£" + globalTransactionAmounts[i]);
+        ui->transactionsTable->setItem(i, 1, item1);
+        item1->setTextAlignment(Qt::AlignCenter);
+        QTableWidgetItem *item2 = new QTableWidgetItem();
+        item2->setText(globalTransactionActions[i]);
+        ui->transactionsTable->setItem(i, 0, item2);
+        item2->setTextAlignment(Qt::AlignCenter);
+        QTableWidgetItem *item3 = new QTableWidgetItem();
+        item3->setText("£" + globalTransactionBalance[i]);
+        ui->transactionsTable->setItem(i, 2, item3);
+        item3->setTextAlignment(Qt::AlignCenter);
+    }
+
+    ui->stackedWidget->setCurrentIndex(4);
+}
+
+
+void MainWindow::on_accountButton_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(5);
+
+    ui->forenameBox->setText(globalForename);
+    ui->surnameBox->setText(globalSurname);
+    ui->usernameBox->setText(globalUsername);
+    ui->userTypeBox->setText(globalUserType);
+    ui->sqBox->setText(globalSecurityQ);
+    ui->sqaBox->setText(globalSecurityA);
+    ui->pinBox->setText(globalBankPin);
+    ui->pwordBox->setText(globalPassword);
+
 }
 
