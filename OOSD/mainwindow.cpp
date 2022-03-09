@@ -372,7 +372,6 @@ void MainWindow::on_transferButton2_clicked()
     }
 }
 
-
 void MainWindow::on_transactionsButton_clicked()
 {
     ui->transactionsTable->setRowCount(globalTransactionActions.length());
