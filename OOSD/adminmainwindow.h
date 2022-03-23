@@ -15,6 +15,13 @@ public:
     explicit AdminMainWindow(QWidget *parent = nullptr);
     ~AdminMainWindow();
 
+private slots:
+    void on_homeButton_clicked();
+
+    void on_viewTransactionsButton_clicked();
+
+    void on_viewAccountsButton_clicked();
+
 private:
     Ui::AdminMainWindow *ui;
 };
