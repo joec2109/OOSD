@@ -142,7 +142,7 @@ void MainWindow::on_depositButton_2_clicked()
             query.bindValue(":globalBankPin", globalBankPin);
 
             globalTransactionAmounts.append(depositAmountInput);
-            globalTransactionActions.append("Deposit");
+            globalTransactionActions.append(globalUsername + " deposit");
             globalTransactionBalance.append(QString::number(globalBalance.toDouble() + amountToDeposit));
 
             globalBalance = QString::number(globalBalance.toDouble() + amountToDeposit);
@@ -230,7 +230,7 @@ void MainWindow::on_withdrawButton2_clicked()
             query.bindValue(":globalBankPin", globalBankPin);
 
             globalTransactionAmounts.append(withdrawAmountInput);
-            globalTransactionActions.append("Withdraw");
+            globalTransactionActions.append(globalUsername + " withdraw");
             globalTransactionBalance.append(QString::number(globalBalance.toDouble() - amountToWithdraw));
 
             globalBalance = QString::number(globalBalance.toDouble() - amountToWithdraw);
@@ -320,7 +320,7 @@ void MainWindow::on_transferButton2_clicked()
             query2.bindValue(":targetSurname", targetSurname);
 
             globalTransactionAmounts.append(transferAmountInput);
-            globalTransactionActions.append("Transfer");
+            globalTransactionActions.append(globalUsername + " transfer to " + targetForename + " " + targetSurname);
             globalTransactionBalance.append(QString::number(globalBalance.toDouble() - amountToTransfer));
 
             globalBalance = QString::number(globalBalance.toDouble() - amountToTransfer);
@@ -409,5 +409,13 @@ void MainWindow::on_accountButton_clicked()
     ui->pinBox->setText(globalBankPin);
     ui->pwordBox->setText(globalPassword);
 
+}
+
+
+void MainWindow::on_logOutButton_clicked()
+{
+    this->hide();
+    LoginWindow *lw = new LoginWindow();
+    lw->show();
 }
 

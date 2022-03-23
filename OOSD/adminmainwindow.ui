@@ -151,7 +151,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="homePage">
      <widget class="QLabel" name="WelcomeLabel">
@@ -204,7 +204,7 @@
      </widget>
     </widget>
     <widget class="QWidget" name="transactionsPage">
-     <widget class="QTableView" name="tableView">
+     <widget class="QTableWidget" name="transactionsTable">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -213,6 +213,45 @@
         <height>251</height>
        </rect>
       </property>
+      <property name="sizeAdjustPolicy">
+       <enum>QAbstractScrollArea::AdjustIgnored</enum>
+      </property>
+      <attribute name="horizontalHeaderVisible">
+       <bool>true</bool>
+      </attribute>
+      <attribute name="horizontalHeaderCascadingSectionResizes">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="horizontalHeaderDefaultSectionSize">
+       <number>170</number>
+      </attribute>
+      <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="horizontalHeaderStretchLastSection">
+       <bool>true</bool>
+      </attribute>
+      <attribute name="verticalHeaderShowSortIndicator" stdset="0">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="verticalHeaderStretchLastSection">
+       <bool>false</bool>
+      </attribute>
+      <column>
+       <property name="text">
+        <string>Action</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Amount</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Account balance after</string>
+       </property>
+      </column>
      </widget>
      <widget class="QLabel" name="WelcomeLabel_2">
       <property name="enabled">
@@ -264,7 +303,7 @@
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QTableView" name="tableView_2">
+     <widget class="QTableView" name="accountsTable">
       <property name="geometry">
        <rect>
         <x>10</x>

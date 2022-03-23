@@ -4,6 +4,7 @@
 #include "MainWindow.h"
 #include "globals.h"
 #include "enterbankpin.h"
+#include "adminmainwindow.h"
 #include <QTextStream>
 #include <QtSql>
 #include <QSqlDatabase>
@@ -39,7 +40,7 @@ void LoginWindow::on_LoginButton_clicked()
     query.bindValue(":password", password);
 
     if (query.exec()) {
-        if (query.size() > 0) {
+        if ((query.size() > 0) && (username != "admin")) {
 
             globalUsername = username;
 
@@ -52,6 +53,21 @@ void LoginWindow::on_LoginButton_clicked()
                 this->hide();
                 EnterBankPin *ebp= new EnterBankPin();
                 ebp->show();
+            } else {
+                qDebug() << "\nOk was *not* clicked";
+            }
+        } else if ((query.size() > 0) && (username == "admin")){
+            globalUsername = username;
+
+            QTextStream(stdout) << "\n" << username << " is logged in";
+            QMessageBox::StandardButton alert;
+            alert = QMessageBox::information(this, "Log In", "Logged in successfully",
+                                        QMessageBox::Ok);
+            if (alert == QMessageBox::Ok) {
+                qDebug() << "\nOk was clicked";
+                this->hide();
+                AdminMainWindow *amw= new AdminMainWindow();
+                amw->show();
             } else {
                 qDebug() << "\nOk was *not* clicked";
             }
