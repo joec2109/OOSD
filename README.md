@@ -7,6 +7,6 @@ QT IDE has been used to create the C++ code
 
 To set up the project, firstly open up XAMPP control panel, then start Apache and MySQL.
 
-Once set up, create a new database within phpmyadmin named 'oosdproject'.
+Once set up, create a new database within phpmyadmin named 'oosdproject' (localhost/phpmyadmin/)
 
 Run the project, and the program will connect to the db and create the table required.
