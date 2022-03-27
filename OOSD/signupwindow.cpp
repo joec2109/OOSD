@@ -2,6 +2,7 @@
 #include "ui_signupwindow.h"
 #include "MainWindow.h"
 #include "loginwindow.h"
+#include "globals.h"
 #include <QTextStream>
 #include <QtSql>
 #include <QSqlDatabase>
@@ -198,6 +199,12 @@ void SignUpWindow::on_SignUpButton_clicked()
 
         QString username = forename[0] + surname;
 
+        accountNames.append(forename + " " + surname);
+        accountPasswords.append(pword);
+        accountPins.append(QString::number(bankpin));
+        accountBalances.append("0");
+        accountUserTypes.append("Customer");
+
         QSqlQuery qry;
         qry.prepare("INSERT INTO users (username, forename, surname, password, securityQuestion, securityAnswer, pin, userType)"
                     "VALUES (:username, :forename, :surname, :password, :securityQuestion, :securityAnswer, :bankpin, 'Customer')");
@@ -229,5 +236,13 @@ void SignUpWindow::on_SignUpButton_clicked()
             QTextStream(stdout) << "\nUser failed to create";
         }
     }
+}
+
+
+void SignUpWindow::on_backButton_clicked()
+{
+    this->hide();
+    LoginWindow *lw = new LoginWindow;
+    lw->show();
 }
 

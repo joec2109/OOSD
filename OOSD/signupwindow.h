@@ -18,6 +18,8 @@ public:
 private slots:
     void on_SignUpButton_clicked();
 
+    void on_backButton_clicked();
+
 private:
     Ui::SignUpWindow *ui;
 };

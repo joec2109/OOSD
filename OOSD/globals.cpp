@@ -19,3 +19,10 @@ QStringList globalTargetSurnames = {};
 QStringList globalTransactionAmounts = {};
 QStringList globalTransactionActions = {};
 QStringList globalTransactionBalance = {};
+
+// For accounts
+QStringList accountNames = {};
+QStringList accountPasswords = {};
+QStringList accountPins = {};
+QStringList accountBalances = {};
+QStringList accountUserTypes = {};

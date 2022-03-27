@@ -84,3 +84,11 @@ void EnterBankPin::on_EnterButton_clicked()
     }
 }
 
+
+void EnterBankPin::on_backButton_clicked()
+{
+    this->hide();
+    LoginWindow *lw = new LoginWindow;
+    lw->show();
+}
+

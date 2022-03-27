@@ -414,6 +414,8 @@ void MainWindow::on_accountButton_clicked()
 
 void MainWindow::on_logOutButton_clicked()
 {
+
+
     this->hide();
     LoginWindow *lw = new LoginWindow();
     lw->show();

@@ -23,4 +23,12 @@ extern QStringList globalTransactionAmounts;
 extern QStringList globalTransactionActions;
 extern QStringList globalTransactionBalance;
 
+// For accounts
+
+extern QStringList accountNames;
+extern QStringList accountPasswords;
+extern QStringList accountPins;
+extern QStringList accountBalances;
+extern QStringList accountUserTypes;
+
 #endif // GLOBALS_H

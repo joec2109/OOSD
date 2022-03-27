@@ -42,6 +42,13 @@ void LoginWindow::on_LoginButton_clicked()
     if (query.exec()) {
         if ((query.size() > 0) && (username != "admin")) {
 
+            globalTargetForenames = {};
+            globalTargetSurnames = {};
+
+            globalTransactionAmounts = {};
+            globalTransactionActions = {};
+            globalTransactionBalance = {};
+
             globalUsername = username;
 
             QTextStream(stdout) << "\n" << username << " is logged in";
