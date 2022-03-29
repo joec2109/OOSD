@@ -11,7 +11,10 @@ CONFIG += c++11
 SOURCES += \
     MainWindow.cpp \
     adminmainwindow.cpp \
+    bankermainwindow.cpp \
     enterbankpin.cpp \
+    forgotbankpin.cpp \
+    forgotpassword.cpp \
     globals.cpp \
     loginwindow.cpp \
     main.cpp \
@@ -20,7 +23,10 @@ SOURCES += \
 HEADERS += \
     MainWindow.h \
     adminmainwindow.h \
+    bankermainwindow.h \
     enterbankpin.h \
+    forgotbankpin.h \
+    forgotpassword.h \
     globals.h \
     globals.h \
     loginwindow.h \
@@ -29,7 +35,10 @@ HEADERS += \
 FORMS += \
     MainWindow.ui \
     adminmainwindow.ui \
+    bankermainwindow.ui \
     enterbankpin.ui \
+    forgotbankpin.ui \
+    forgotpassword.ui \
     loginwindow.ui \
     signupwindow.ui
 

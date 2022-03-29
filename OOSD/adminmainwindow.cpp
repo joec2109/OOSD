@@ -27,17 +27,6 @@ AdminMainWindow::AdminMainWindow(QWidget *parent) :
         ui->transactionsTable->setItem(i, 2, item3);
     }
 
-    // Collecting accounts information
-    QSqlQuery query3;
-    query3.prepare("SELECT forename, surname, password, pin, balance, userType FROM users WHERE userType != 'Admin'");
-    query3.exec();
-    while(query3.next()) {
-        accountNames.append(query3.value(0).toString() + " " + query3.value(1).toString());
-        accountPasswords.append(query3.value(2).toString());
-        accountPins.append(query3.value(3).toString());
-        accountBalances.append(query3.value(4).toString());
-        accountUserTypes.append(query3.value(5).toString());
-    }
     // Insert accounts in to the account table
     ui->accountsTable->setRowCount(accountNames.length());
     for (int i = 0; i < ui->accountsTable->rowCount(); i++) {
@@ -116,11 +105,6 @@ void AdminMainWindow::on_viewAccountsButton_clicked()
 void AdminMainWindow::on_pushButton_clicked()
 {
     ui->accountsTable->setRowCount(0);
-    accountNames.clear();
-    accountPasswords.clear();
-    accountPins.clear();
-    accountBalances.clear();
-    accountUserTypes.clear();
     this->hide();
     LoginWindow *lw = new LoginWindow();
     lw->show();

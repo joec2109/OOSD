@@ -23,6 +23,10 @@ extern QStringList globalTransactionAmounts;
 extern QStringList globalTransactionActions;
 extern QStringList globalTransactionBalance;
 
+extern QStringList globalSenderForenames;
+extern QStringList globalSenderSurnames;
+extern QStringList globalSenderBalances;
+
 // For accounts
 
 extern QStringList accountNames;

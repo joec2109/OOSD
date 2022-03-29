@@ -72,6 +72,17 @@ int main(int argc, char *argv[])
         QTextStream(stdout) << "\nUser Adam Smith inserted successfully.";
     }
 
+    // Collecting accounts information
+    QSqlQuery collectingAccounts;
+    collectingAccounts.prepare("SELECT forename, surname, password, pin, balance, userType FROM users WHERE username != 'admin'");
+    collectingAccounts.exec();
+    while(collectingAccounts.next()) {
+        accountNames.append(collectingAccounts.value(0).toString() + " " + collectingAccounts.value(1).toString());
+        accountPasswords.append(collectingAccounts.value(2).toString());
+        accountPins.append(collectingAccounts.value(3).toString());
+        accountBalances.append(collectingAccounts.value(4).toString());
+        accountUserTypes.append(collectingAccounts.value(5).toString());
+    }
 
     LoginWindow lw;
     lw.show();

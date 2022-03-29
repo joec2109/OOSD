@@ -169,8 +169,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Forgot Password
-Or Username?</string>
+     <string>Forgot Password?</string>
     </property>
    </widget>
   </widget>

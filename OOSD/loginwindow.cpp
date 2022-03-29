@@ -5,6 +5,8 @@
 #include "globals.h"
 #include "enterbankpin.h"
 #include "adminmainwindow.h"
+#include "forgotpassword.h"
+#include "bankermainwindow.h"
 #include <QTextStream>
 #include <QtSql>
 #include <QSqlDatabase>
@@ -39,8 +41,14 @@ void LoginWindow::on_LoginButton_clicked()
     query.bindValue(":username", username);
     query.bindValue(":password", password);
 
+    QSqlQuery query2;
+    query2.prepare("SELECT username FROM users WHERE userType = 'Banker' AND username = :username AND password = :password");
+    query2.bindValue(":username", username);
+    query2.bindValue(":password", password);
+    query2.exec();
+
     if (query.exec()) {
-        if ((query.size() > 0) && (username != "admin")) {
+        if ((query.size() > 0) && (username != "admin") && (query2.size() == 0)) {
 
             globalTargetForenames = {};
             globalTargetSurnames = {};
@@ -78,6 +86,31 @@ void LoginWindow::on_LoginButton_clicked()
             } else {
                 qDebug() << "\nOk was *not* clicked";
             }
+        } else if ((query.size() > 0) && (query2.size() > 0)) {
+            globalUsername = username;
+
+            // Grabbing the forename of the logged in user
+            QSqlQuery query2;
+            query2.prepare("SELECT forename FROM users WHERE userType = 'Banker' AND username = :username");
+            query2.bindValue(":username", username);
+            if(query2.exec()) {
+                if (query2.next()) {
+                    globalForename = query2.value(0).toString();
+                }
+            }
+
+            QTextStream(stdout) << "\n" << username << " is logged in";
+            QMessageBox::StandardButton alert;
+            alert = QMessageBox::information(this, "Log In", "Logged in successfully",
+                                        QMessageBox::Ok);
+            if (alert == QMessageBox::Ok) {
+                qDebug() << "\nOk was clicked";
+                this->hide();
+                BankerMainWindow *bmw= new BankerMainWindow();
+                bmw->show();
+            } else {
+                qDebug() << "\nOk was *not* clicked";
+            }
         } else {
             QTextStream(stdout) << "Username or password is incorrect";
             QMessageBox::StandardButton alert;
@@ -91,3 +124,11 @@ void LoginWindow::on_LoginButton_clicked()
         }
     }
 }
+
+void LoginWindow::on_ForgotPasswordButton_clicked()
+{
+    this->hide();
+    ForgotPassword *fpw = new ForgotPassword;
+    fpw->show();
+}
+

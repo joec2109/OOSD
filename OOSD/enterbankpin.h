@@ -20,6 +20,8 @@ private slots:
 
     void on_backButton_clicked();
 
+    void on_ForgotBankPinButton_clicked();
+
 private:
     Ui::EnterBankPin *ui;
 };

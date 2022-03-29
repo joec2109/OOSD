@@ -4,6 +4,7 @@
 #include "globals.h"
 #include "MainWindow.h"
 #include "ui_mainwindow.h"
+#include "forgotbankpin.h"
 #include <QTextStream>
 #include <QtSql>
 #include <QSqlDatabase>
@@ -90,5 +91,13 @@ void EnterBankPin::on_backButton_clicked()
     this->hide();
     LoginWindow *lw = new LoginWindow;
     lw->show();
+}
+
+
+void EnterBankPin::on_ForgotBankPinButton_clicked()
+{
+    this->hide();
+    ForgotBankPin *fbp = new ForgotBankPin;
+    fbp->show();
 }
 
