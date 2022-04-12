@@ -84,8 +84,8 @@ int main(int argc, char *argv[])
         accountUserTypes.append(collectingAccounts.value(5).toString());
     }
 
-    LoginWindow lw;
-    lw.show();
+    LoginWindow *lw = new LoginWindow;
+    lw->show();
     return a.exec();
 
 }

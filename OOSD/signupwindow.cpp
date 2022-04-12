@@ -10,6 +10,44 @@
 
 using namespace std;
 
+// Classes with functions used within this source file.
+class account {
+
+public:
+
+    // Function to append the newly created account details to the account global variables if they are valid
+    void account_global_append(QString forename, QString surname, QString pword, QString strBankpin) {
+        accountNames.append(forename + " " + surname);
+        accountPasswords.append(pword);
+        accountPins.append(strBankpin);
+        accountBalances.append("0");
+        accountUserTypes.append("Customer");
+    }
+
+    // Function to insert details in to the db if they are valid
+    void create_new_account(QString username, QString forename, QString surname, QString pword, QString secquestion, QString sqanswer, int bankpin) {
+        QTextStream(stdout) <<"\nAttempting to insert details in to db...";
+        QSqlQuery qry;
+        qry.prepare("INSERT INTO users (username, forename, surname, password, securityQuestion, securityAnswer, pin, userType)"
+                    "VALUES (:username, :forename, :surname, :password, :securityQuestion, :securityAnswer, :bankpin, 'Customer')");
+
+        qry.bindValue(":username", username);
+        qry.bindValue(":forename", forename);
+        qry.bindValue(":surname", surname);
+        qry.bindValue(":password", pword);
+        qry.bindValue(":securityQuestion", secquestion);
+        qry.bindValue(":securityAnswer", sqanswer);
+        qry.bindValue(":bankpin", bankpin);
+        QTextStream(stdout) << "\nChecking if details were inserted...";
+        if(qry.exec()) {
+            QTextStream(stdout) << "\nInserted details in to db.";
+        } else {
+            QTextStream(stdout) << "\nFailed to insert details in to db.";
+        }
+    }
+};
+
+// Initialise the SignUpWindow object.
 SignUpWindow::SignUpWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::SignUpWindow)
@@ -22,9 +60,10 @@ SignUpWindow::~SignUpWindow()
     delete ui;
 }
 
+// Validate the details the user has inputted to see if they can create an account. If they are valid, create the account.
 void SignUpWindow::on_SignUpButton_clicked()
 {
-    bool forenameValid = false, surnameValid = false, passwordValid = false, SQValid = false, SQAnswerValid = false, pinValid = false;
+    bool forenameValid = false, surnameValid = false, passwordValid = false, cfirmPasswordValid = false, SQValid = false, SQAnswerValid = false, pinValid = false;
 
     // Validation
 
@@ -121,6 +160,7 @@ void SignUpWindow::on_SignUpButton_clicked()
         QTextStream(stdout) << "\nConfirm password must match password";
         ui->ConfirmPasswordLabel->setStyleSheet("QLabel { color : red; }");
     } else {
+        cfirmPasswordValid = true;
         ui->ConfirmPasswordLabel->setStyleSheet("QLabel { color : black; }");
     }
 
@@ -187,41 +227,32 @@ void SignUpWindow::on_SignUpButton_clicked()
     }
 
     // If data entered is valid, insert in to the database.
+    try {
+        if ((forenameValid == true) && (surnameValid == true) && (passwordValid == true) && (SQValid == true) && (SQAnswerValid == true) && (pinValid == true) && (cfirmPasswordValid == true)) {
+            QString forename = ui->ForenameBox->text();
+            QString surname = ui->SurnameBox->text();
+            QString pword = ui->PasswordBox->text();
+            QString secquestion = ui->SecurityQuestionBox->currentText();
+            QString sqanswer = ui->SQAnswerBox->text();
+            QString strBankpin = ui->BankPINBox->text();
+            int bankpin =  strBankpin.toInt();
 
-    if (forenameValid == true && surnameValid == true && passwordValid == true && SQValid == true && SQAnswerValid == true && pinValid == true) {
-        QString forename = ui->ForenameBox->text();
-        QString surname = ui->SurnameBox->text();
-        QString pword = ui->PasswordBox->text();
-        QString secquestion = ui->SecurityQuestionBox->currentText();
-        QString sqanswer = ui->SQAnswerBox->text();
-        QString str = ui->BankPINBox->text();
-        int bankpin =  str.toInt();
+            QTextStream(stdout) << "\nYour username is: " + (forename[0]+surname);
 
-        QString username = forename[0] + surname;
+            QTextStream(stdout) << "\nDetails valid.";
 
-        accountNames.append(forename + " " + surname);
-        accountPasswords.append(pword);
-        accountPins.append(QString::number(bankpin));
-        accountBalances.append("0");
-        accountUserTypes.append("Customer");
+            // Create an object of the newAccount class so the functions within it can be executed.
+            account newAccount;
 
-        QSqlQuery qry;
-        qry.prepare("INSERT INTO users (username, forename, surname, password, securityQuestion, securityAnswer, pin, userType)"
-                    "VALUES (:username, :forename, :surname, :password, :securityQuestion, :securityAnswer, :bankpin, 'Customer')");
+            // Append the new account details on to the account global variables
+            newAccount.account_global_append(forename, surname, pword, strBankpin);
 
-        qry.bindValue(":username", username);
-        qry.bindValue(":forename", forename);
-        qry.bindValue(":surname", surname);
-        qry.bindValue(":password", password);
-        qry.bindValue(":securityQuestion", secquestion);
-        qry.bindValue(":securityAnswer", sqanswer);
-        qry.bindValue(":bankpin", bankpin);
-
-        if (qry.exec()) {
+            // Insert the new account on to the db
+            newAccount.create_new_account(forename[0]+surname, forename, surname, pword, secquestion, sqanswer, bankpin);
             QTextStream(stdout) << "\nUser inserted into DB";
 
             QMessageBox::StandardButton alert;
-            alert = QMessageBox::information(this, "Sign Up", "Signed up successfully\nYour username is : " + username,
+            alert = QMessageBox::information(this, "Sign Up", "Signed up successfully\nYour username is : " + (forename[0]+surname),
                                         QMessageBox::Ok);
             if (alert == QMessageBox::Ok) {
                 qDebug() << "\nOk was clicked";
@@ -231,14 +262,26 @@ void SignUpWindow::on_SignUpButton_clicked()
             } else {
                 qDebug() << "\nOk was *not* clicked";
             }
-
         } else {
-            QTextStream(stdout) << "\nUser failed to create";
+            throw(1);
+        }
+    }
+    // If data entered is invalid, show a 'failed to sign up' message.
+    catch (int result) {
+        QTextStream(stdout) << "\nUser inserted into DB";
+
+        QMessageBox::StandardButton alert;
+        alert = QMessageBox::information(this, "Sign Up", "Failed to sign up",
+                                    QMessageBox::Ok);
+        if (alert == QMessageBox::Ok) {
+            qDebug() << "\nOk was clicked";
+        } else {
+            qDebug() << "\nOk was *not* clicked";
         }
     }
 }
 
-
+// Return user to the login window if the back button is clicked.
 void SignUpWindow::on_backButton_clicked()
 {
     this->hide();

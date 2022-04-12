@@ -7,6 +7,49 @@
 #include <QSqlRecord>
 #include <QMessageBox>
 
+class accountActions {
+private:
+    QString receiver_action(QString amount, QString tForename, QString tSurname) {
+        QSqlQuery query2;
+        query2.prepare("UPDATE users SET balance = balance + :amountToTransfer WHERE forename = :targetForename AND surname = :targetSurname");
+        query2.bindValue(":amountToTransfer", amount);
+        query2.bindValue(":targetForename", tForename);
+        query2.bindValue(":targetSurname", tSurname);
+
+        if(query2.exec()) {
+            return "Success";
+        } else {
+            return "";
+        }
+    }
+
+    QString sender_action(QString amount, QString sForename, QString sSurname) {
+        // Create query to remove the amount being transferred from the sending users account balance
+        QSqlQuery query;
+        query.prepare("UPDATE users SET balance = balance - :amountToTransfer WHERE forename = :senderForename AND surname = :senderSurname");
+        query.bindValue(":amountToTransfer", amount);
+        query.bindValue(":senderForename", sForename);
+        query.bindValue(":senderSurname", sSurname);
+
+        if(query.exec()) {
+            return "Success";
+        } else {
+            return "";
+        }
+    }
+public:
+    QString transfer(QString amount, QString tForename, QString tSurname, QString sForename, QString sSurname) {
+        QString raResult = receiver_action(amount, tForename, tSurname);
+        QString saResult = sender_action(amount, sForename, sSurname);
+
+        if ((raResult == "Success") && (saResult == "Success")) {
+            return "Success";
+        } else {
+            return "";
+        }
+    }
+};
+
 BankerMainWindow::BankerMainWindow(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::BankerMainWindow)
@@ -82,6 +125,8 @@ void BankerMainWindow::on_customersButton_clicked()
 // When the submit transfer button is clicked.
 void BankerMainWindow::on_pushButton_2_clicked()
 {
+    accountActions actions;
+
     double amountToTransfer = ui->amountBox->text().toDouble();
     QString transferAmountInput = ui->amountBox->text();
     int numOfNumbers = 0;
@@ -106,56 +151,46 @@ void BankerMainWindow::on_pushButton_2_clicked()
         }
     }
 
-    // Ensure the transfer amount is not empty and doesn't include any spaces and the user actually has enough money to complete it.
-    if ((numOfSpaces == 0) && (transferAmountInput != "") && (globalSenderBalances[ui->senderBox->currentIndex()].toDouble() - amountToTransfer >= 0)) {
-        // Ensure the transfer amount only includes numbers and a possible decimal point.
-        if (((numOfNumbers == transferAmountInput.length()) && (numOfDecimalPoints == 0)) || ((numOfNumbers == transferAmountInput.length() - 1) && (numOfDecimalPoints == 1))){
-            // Create query to remove the amount being transferred from the sending users account balance
-            QSqlQuery query;
-            query.prepare("UPDATE users SET balance = balance - :amountToTransfer WHERE forename = :senderForename AND surname = :senderSurname");
-            query.bindValue(":amountToTransfer", amountToTransfer);
-            query.bindValue(":senderForename", senderForename);
-            query.bindValue(":senderSurname", senderSurname);
+    try {
+        // Ensure the transfer amount is not empty and doesn't include any spaces and the user actually has enough money to complete it.
+        if ((numOfSpaces == 0) && (transferAmountInput != "") && (globalSenderBalances[ui->senderBox->currentIndex()].toDouble() - amountToTransfer >= 0)) {
+            // Ensure the transfer amount only includes numbers and a possible decimal point.
+            if (((numOfNumbers == transferAmountInput.length()) && (numOfDecimalPoints == 0)) || ((numOfNumbers == transferAmountInput.length() - 1) && (numOfDecimalPoints == 1))){
+                // call the transfer function to perform the transaction
+                QString transferResult = actions.transfer(transferAmountInput, targetForename, targetSurname, senderForename, senderSurname);
 
-            // Create query to add the amount being transferred to the receiving users account balance.
-            QSqlQuery query2;
-            query2.prepare("UPDATE users SET balance = balance + :amountToTransfer WHERE forename = :targetForename AND surname = :targetSurname");
-            query2.bindValue(":amountToTransfer", amountToTransfer);
-            query2.bindValue(":targetForename", targetForename);
-            query2.bindValue(":targetSurname", targetSurname);
+                globalTransactionAmounts.append(transferAmountInput);
+                globalTransactionActions.append(senderForename + senderSurname + " transfer to " + targetForename + " " + targetSurname);
 
-            globalTransactionAmounts.append(transferAmountInput);
-            globalTransactionActions.append(senderForename + senderSurname + " transfer to " + targetForename + " " + targetSurname);
-
-            if (ui->senderBox->currentText() == ui->receiverBox->currentText()) {
-                globalTransactionBalance.append(QString::number(globalSenderBalances[ui->senderBox->currentIndex()].toDouble()));
-                // This means that the person is sending money to their own account, therefore the balance remains unchanged.
-            } else {
-                globalTransactionBalance.append(QString::number(globalSenderBalances[ui->senderBox->currentIndex()].toDouble() - amountToTransfer));
-            }
-
-            if (query.exec() && query2.exec()) {
-                QTextStream(stdout) << "\nTransfer successful";
-                QMessageBox::StandardButton alert;
-                alert = QMessageBox::information(this, "Transfer", "Transfer successful",
-                                            QMessageBox::Ok);
-                if (alert == QMessageBox::Ok) {
-                    qDebug() << "\nOk was clicked";
+                if (ui->senderBox->currentText() == ui->receiverBox->currentText()) {
+                    globalTransactionBalance.append(QString::number(globalSenderBalances[ui->senderBox->currentIndex()].toDouble()));
+                    // This means that the person is sending money to their own account, therefore the balance remains unchanged.
                 } else {
-                    qDebug() << "\nOk was *not* clicked";
+                    globalTransactionBalance.append(QString::number(globalSenderBalances[ui->senderBox->currentIndex()].toDouble() - amountToTransfer));
+                }
+
+                if (transferResult == "Success") {
+                    QTextStream(stdout) << "\nTransfer successful";
+                    QMessageBox::StandardButton alert;
+                    alert = QMessageBox::information(this, "Transfer", "Transfer successful",
+                                                QMessageBox::Ok);
+                    if (alert == QMessageBox::Ok) {
+                        qDebug() << "\nOk was clicked";
+                    } else {
+                        qDebug() << "\nOk was *not* clicked";
+                    }
+                } else {
+                    throw(1);
                 }
             } else {
-                QTextStream(stdout) << "\nTransfer unsuccesful";
-                QMessageBox::StandardButton alert;
-                alert = QMessageBox::information(this, "Transfer", "Transfer unsuccesful",
-                                            QMessageBox::Ok);
-                if (alert == QMessageBox::Ok) {
-                    qDebug() << "\nOk was clicked";
-                } else {
-                    qDebug() << "\nOk was *not* clicked";
-                }
+                throw(1);
             }
         } else {
+            throw(1);
+        }
+    }
+    catch(int result) {
+        if (result == 1) {
             QTextStream(stdout) << "\nTransfer unsuccesful";
             QMessageBox::StandardButton alert;
             alert = QMessageBox::information(this, "Transfer", "Transfer unsuccesful",
@@ -165,16 +200,6 @@ void BankerMainWindow::on_pushButton_2_clicked()
             } else {
                 qDebug() << "\nOk was *not* clicked";
             }
-        }
-    } else {
-        QTextStream(stdout) << "\nTransfer unsuccesful";
-        QMessageBox::StandardButton alert;
-        alert = QMessageBox::information(this, "Transfer", "Transfer unsuccesful",
-                                    QMessageBox::Ok);
-        if (alert == QMessageBox::Ok) {
-            qDebug() << "\nOk was clicked";
-        } else {
-            qDebug() << "\nOk was *not* clicked";
         }
     }
 }

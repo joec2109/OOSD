@@ -2,6 +2,7 @@
 #include <QString>
 #include <QStringList>
 
+// For current user signed in
 QString globalUsername = "";
 QString globalBankPin = "";
 QString globalForename = "";
