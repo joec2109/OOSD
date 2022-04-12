@@ -13,6 +13,6 @@ Once set up, create a new database within phpmyadmin named 'oosdproject' (localh
 
 Run the project, and the program will connect to the db and create the table required.
 
-In order to test the software to it's full capability, it is recommended to create a few accounts.
+In order to test the software to it's full capability, it is recommended to create a few accounts (using the sign up window).
 
 To log in as the admin, the username is: 'admin' and the password is 'admin123'.
