@@ -35,4 +35,12 @@ extern QStringList accountPins;
 extern QStringList accountBalances;
 extern QStringList accountUserTypes;
 
+// For customer accounts
+
+extern QStringList customerAccountNames;
+extern QStringList customerAccountPasswords;
+extern QStringList customerAccountPins;
+extern QStringList customerAccountBalances;
+extern QStringList customerAccountUserTypes;
+
 #endif // GLOBALS_H

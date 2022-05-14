@@ -78,16 +78,16 @@ BankerMainWindow::BankerMainWindow(QWidget *parent) :
     }
 
     // Insert accounts in to the account table
-    ui->customersTable->setRowCount(accountNames.length());
+    ui->customersTable->setRowCount(customerAccountNames.length());
     for (int i = 0; i < ui->customersTable->rowCount(); i++) {
         QTableWidgetItem *item1 = new QTableWidgetItem();
-        item1 -> setText(accountNames[i]);
+        item1 -> setText(customerAccountNames[i]);
         ui->customersTable->setItem(i, 0, item1);
         QTableWidgetItem *item2 = new QTableWidgetItem();
-        item2 -> setText(accountBalances[i]);
+        item2 -> setText(customerAccountBalances[i]);
         ui->customersTable->setItem(i, 1, item2);
         QTableWidgetItem *item3 = new QTableWidgetItem();
-        item3 -> setText(accountUserTypes[i]);
+        item3 -> setText(customerAccountUserTypes[i]);
         ui->customersTable->setItem(i, 2, item3);
     }
 }

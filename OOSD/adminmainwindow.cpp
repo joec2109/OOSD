@@ -343,8 +343,6 @@ void AdminMainWindow::on_revertTransactionButton_clicked()
             globalTransactionActions.remove(transactionSelectedIndex[0].row());
             globalTransactionAmounts.remove(transactionSelectedIndex[0].row());
             globalTransactionBalance.remove(transactionSelectedIndex[0].row());
-            globalTargetForenames.remove(transactionSelectedIndex[0].row());
-            globalTargetSurnames.remove(transactionSelectedIndex[0].row());
         }
     }
 }

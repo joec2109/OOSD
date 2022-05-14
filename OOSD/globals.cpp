@@ -31,3 +31,10 @@ QStringList accountPasswords = {};
 QStringList accountPins = {};
 QStringList accountBalances = {};
 QStringList accountUserTypes = {};
+
+// For customer accounts
+QStringList customerAccountNames = {};
+QStringList customerAccountPasswords = {};
+QStringList customerAccountPins = {};
+QStringList customerAccountBalances = {};
+QStringList customerAccountUserTypes = {};

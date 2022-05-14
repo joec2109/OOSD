@@ -383,17 +383,28 @@ void MainWindow::on_withdrawButton2_clicked()
                 throw(1);
             }
         } else {
-            throw(1);
+            throw(2);
         }
     }
     catch (int result) {
-        QMessageBox::StandardButton alert;
-        alert = QMessageBox::information(this, "Withdraw", "Withdraw unsuccessful. You can only withdraw number values.",
-                                    QMessageBox::Ok);
-        if (alert == QMessageBox::Ok) {
-            qDebug() << "\nOk was clicked";
+        if (result == 1) {
+            QMessageBox::StandardButton alert;
+            alert = QMessageBox::information(this, "Withdraw", "Withdraw unsuccessful. You can only withdraw number values.",
+                                        QMessageBox::Ok);
+            if (alert == QMessageBox::Ok) {
+                qDebug() << "\nOk was clicked";
+            } else {
+                qDebug() << "\nOk was *not* clicked";
+            }
         } else {
-            qDebug() << "\nOk was *not* clicked";
+            QMessageBox::StandardButton alert;
+            alert = QMessageBox::information(this, "Withdraw", "Withdraw unsuccessful. Insufficient funds.",
+                                        QMessageBox::Ok);
+            if (alert == QMessageBox::Ok) {
+                qDebug() << "\nOk was clicked";
+            } else {
+                qDebug() << "\nOk was *not* clicked";
+            }
         }
     }
 

@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
         QTextStream(stdout) << "\nAdmin user already exists";
     } else {
         QSqlQuery query3;
-        query3.prepare("INSERT INTO users (username, password) VALUES ('admin', 'Admin123')");
+        query3.prepare("INSERT INTO users (username, password, balance) VALUES ('admin', 'Admin123', '0')");
         query3.exec();
         QTextStream(stdout) << "\nAdmin user created";
     }
@@ -82,6 +82,18 @@ int main(int argc, char *argv[])
         accountPins.append(collectingAccounts.value(3).toString());
         accountBalances.append(collectingAccounts.value(4).toString());
         accountUserTypes.append(collectingAccounts.value(5).toString());
+    }
+
+    // Collecting accounts information of just customers
+    QSqlQuery collectingCustomerAccounts;
+    collectingCustomerAccounts.prepare("SELECT forename, surname, password, pin, balance, userType FROM users WHERE userType = 'Customer'");
+    collectingCustomerAccounts.exec();
+    while(collectingCustomerAccounts.next()) {
+        customerAccountNames.append(collectingCustomerAccounts.value(0).toString() + " " + collectingCustomerAccounts.value(1).toString());
+        customerAccountPasswords.append(collectingCustomerAccounts.value(2).toString());
+        customerAccountPins.append(collectingCustomerAccounts.value(3).toString());
+        customerAccountBalances.append(collectingCustomerAccounts.value(4).toString());
+        customerAccountUserTypes.append(collectingCustomerAccounts.value(5).toString());
     }
 
     LoginWindow *lw = new LoginWindow;
